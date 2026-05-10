@@ -13,6 +13,7 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIntelligenceRouteImport } from './routes/dashboard.intelligence'
 import { Route as DashboardCreativeRouteImport } from './routes/dashboard.creative'
+import { Route as DashboardCampaignsRouteImport } from './routes/dashboard.campaigns'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -34,16 +35,23 @@ const DashboardCreativeRoute = DashboardCreativeRouteImport.update({
   path: '/creative',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardCampaignsRoute = DashboardCampaignsRouteImport.update({
+  id: '/campaigns',
+  path: '/campaigns',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
@@ -51,6 +59,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
@@ -59,14 +68,21 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/dashboard/campaigns'
     | '/dashboard/creative'
     | '/dashboard/intelligence'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/dashboard/creative' | '/dashboard/intelligence'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/campaigns'
+    | '/dashboard/creative'
+    | '/dashboard/intelligence'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/campaigns'
     | '/dashboard/creative'
     | '/dashboard/intelligence'
   fileRoutesById: FileRoutesById
@@ -106,15 +122,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCreativeRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/campaigns': {
+      id: '/dashboard/campaigns'
+      path: '/campaigns'
+      fullPath: '/dashboard/campaigns'
+      preLoaderRoute: typeof DashboardCampaignsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardCampaignsRoute: typeof DashboardCampaignsRoute
   DashboardCreativeRoute: typeof DashboardCreativeRoute
   DashboardIntelligenceRoute: typeof DashboardIntelligenceRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardCampaignsRoute: DashboardCampaignsRoute,
   DashboardCreativeRoute: DashboardCreativeRoute,
   DashboardIntelligenceRoute: DashboardIntelligenceRoute,
 }
