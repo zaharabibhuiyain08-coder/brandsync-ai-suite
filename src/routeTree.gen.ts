@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIntelligenceRouteImport } from './routes/dashboard.intelligence'
+import { Route as DashboardCrmRouteImport } from './routes/dashboard.crm'
 import { Route as DashboardCreativeRouteImport } from './routes/dashboard.creative'
 import { Route as DashboardCampaignsRouteImport } from './routes/dashboard.campaigns'
 import { Route as DashboardAudienceRouteImport } from './routes/dashboard.audience'
@@ -29,6 +30,11 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardIntelligenceRoute = DashboardIntelligenceRouteImport.update({
   id: '/intelligence',
   path: '/intelligence',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardCrmRoute = DashboardCrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardCreativeRoute = DashboardCreativeRouteImport.update({
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/audience': typeof DashboardAudienceRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
+  '/dashboard/crm': typeof DashboardCrmRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/dashboard/audience': typeof DashboardAudienceRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
+  '/dashboard/crm': typeof DashboardCrmRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRoutesById {
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   '/dashboard/audience': typeof DashboardAudienceRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
+  '/dashboard/crm': typeof DashboardCrmRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRouteTypes {
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
     | '/dashboard/audience'
     | '/dashboard/campaigns'
     | '/dashboard/creative'
+    | '/dashboard/crm'
     | '/dashboard/intelligence'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
     | '/dashboard/audience'
     | '/dashboard/campaigns'
     | '/dashboard/creative'
+    | '/dashboard/crm'
     | '/dashboard/intelligence'
   id:
     | '__root__'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '/dashboard/audience'
     | '/dashboard/campaigns'
     | '/dashboard/creative'
+    | '/dashboard/crm'
     | '/dashboard/intelligence'
   fileRoutesById: FileRoutesById
 }
@@ -127,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIntelligenceRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/crm': {
+      id: '/dashboard/crm'
+      path: '/crm'
+      fullPath: '/dashboard/crm'
+      preLoaderRoute: typeof DashboardCrmRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/creative': {
       id: '/dashboard/creative'
       path: '/creative'
@@ -155,6 +174,7 @@ interface DashboardRouteChildren {
   DashboardAudienceRoute: typeof DashboardAudienceRoute
   DashboardCampaignsRoute: typeof DashboardCampaignsRoute
   DashboardCreativeRoute: typeof DashboardCreativeRoute
+  DashboardCrmRoute: typeof DashboardCrmRoute
   DashboardIntelligenceRoute: typeof DashboardIntelligenceRoute
 }
 
@@ -162,6 +182,7 @@ const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardAudienceRoute: DashboardAudienceRoute,
   DashboardCampaignsRoute: DashboardCampaignsRoute,
   DashboardCreativeRoute: DashboardCreativeRoute,
+  DashboardCrmRoute: DashboardCrmRoute,
   DashboardIntelligenceRoute: DashboardIntelligenceRoute,
 }
 
