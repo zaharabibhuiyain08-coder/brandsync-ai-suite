@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIntelligenceRouteImport } from './routes/dashboard.intelligence'
+import { Route as DashboardCreativeRouteImport } from './routes/dashboard.creative'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -28,29 +29,46 @@ const DashboardIntelligenceRoute = DashboardIntelligenceRouteImport.update({
   path: '/intelligence',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardCreativeRoute = DashboardCreativeRouteImport.update({
+  id: '/creative',
+  path: '/creative',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/dashboard/intelligence'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/creative'
+    | '/dashboard/intelligence'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/dashboard/intelligence'
-  id: '__root__' | '/' | '/dashboard' | '/dashboard/intelligence'
+  to: '/' | '/dashboard' | '/dashboard/creative' | '/dashboard/intelligence'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/dashboard/creative'
+    | '/dashboard/intelligence'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -81,14 +99,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIntelligenceRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/creative': {
+      id: '/dashboard/creative'
+      path: '/creative'
+      fullPath: '/dashboard/creative'
+      preLoaderRoute: typeof DashboardCreativeRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardCreativeRoute: typeof DashboardCreativeRoute
   DashboardIntelligenceRoute: typeof DashboardIntelligenceRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardCreativeRoute: DashboardCreativeRoute,
   DashboardIntelligenceRoute: DashboardIntelligenceRoute,
 }
 
