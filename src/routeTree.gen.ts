@@ -11,11 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardSimulationRouteImport } from './routes/dashboard.simulation'
+import { Route as DashboardReputationRouteImport } from './routes/dashboard.reputation'
 import { Route as DashboardIntelligenceRouteImport } from './routes/dashboard.intelligence'
+import { Route as DashboardInfluencersRouteImport } from './routes/dashboard.influencers'
 import { Route as DashboardCrmRouteImport } from './routes/dashboard.crm'
 import { Route as DashboardCreativeRouteImport } from './routes/dashboard.creative'
+import { Route as DashboardCollaborationRouteImport } from './routes/dashboard.collaboration'
 import { Route as DashboardCampaignsRouteImport } from './routes/dashboard.campaigns'
+import { Route as DashboardBillingRouteImport } from './routes/dashboard.billing'
 import { Route as DashboardAudienceRouteImport } from './routes/dashboard.audience'
+import { Route as DashboardAnalyticsRouteImport } from './routes/dashboard.analytics'
 
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
@@ -27,9 +33,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardSimulationRoute = DashboardSimulationRouteImport.update({
+  id: '/simulation',
+  path: '/simulation',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardReputationRoute = DashboardReputationRouteImport.update({
+  id: '/reputation',
+  path: '/reputation',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardIntelligenceRoute = DashboardIntelligenceRouteImport.update({
   id: '/intelligence',
   path: '/intelligence',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardInfluencersRoute = DashboardInfluencersRouteImport.update({
+  id: '/influencers',
+  path: '/influencers',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardCrmRoute = DashboardCrmRouteImport.update({
@@ -42,9 +63,19 @@ const DashboardCreativeRoute = DashboardCreativeRouteImport.update({
   path: '/creative',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardCollaborationRoute = DashboardCollaborationRouteImport.update({
+  id: '/collaboration',
+  path: '/collaboration',
+  getParentRoute: () => DashboardRoute,
+} as any)
 const DashboardCampaignsRoute = DashboardCampaignsRouteImport.update({
   id: '/campaigns',
   path: '/campaigns',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardBillingRoute = DashboardBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
   getParentRoute: () => DashboardRoute,
 } as any)
 const DashboardAudienceRoute = DashboardAudienceRouteImport.update({
@@ -52,63 +83,104 @@ const DashboardAudienceRoute = DashboardAudienceRouteImport.update({
   path: '/audience',
   getParentRoute: () => DashboardRoute,
 } as any)
+const DashboardAnalyticsRoute = DashboardAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => DashboardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/audience': typeof DashboardAudienceRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/collaboration': typeof DashboardCollaborationRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/crm': typeof DashboardCrmRoute
+  '/dashboard/influencers': typeof DashboardInfluencersRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
+  '/dashboard/reputation': typeof DashboardReputationRoute
+  '/dashboard/simulation': typeof DashboardSimulationRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/audience': typeof DashboardAudienceRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/collaboration': typeof DashboardCollaborationRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/crm': typeof DashboardCrmRoute
+  '/dashboard/influencers': typeof DashboardInfluencersRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
+  '/dashboard/reputation': typeof DashboardReputationRoute
+  '/dashboard/simulation': typeof DashboardSimulationRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/analytics': typeof DashboardAnalyticsRoute
   '/dashboard/audience': typeof DashboardAudienceRoute
+  '/dashboard/billing': typeof DashboardBillingRoute
   '/dashboard/campaigns': typeof DashboardCampaignsRoute
+  '/dashboard/collaboration': typeof DashboardCollaborationRoute
   '/dashboard/creative': typeof DashboardCreativeRoute
   '/dashboard/crm': typeof DashboardCrmRoute
+  '/dashboard/influencers': typeof DashboardInfluencersRoute
   '/dashboard/intelligence': typeof DashboardIntelligenceRoute
+  '/dashboard/reputation': typeof DashboardReputationRoute
+  '/dashboard/simulation': typeof DashboardSimulationRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/dashboard/analytics'
     | '/dashboard/audience'
+    | '/dashboard/billing'
     | '/dashboard/campaigns'
+    | '/dashboard/collaboration'
     | '/dashboard/creative'
     | '/dashboard/crm'
+    | '/dashboard/influencers'
     | '/dashboard/intelligence'
+    | '/dashboard/reputation'
+    | '/dashboard/simulation'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard'
+    | '/dashboard/analytics'
     | '/dashboard/audience'
+    | '/dashboard/billing'
     | '/dashboard/campaigns'
+    | '/dashboard/collaboration'
     | '/dashboard/creative'
     | '/dashboard/crm'
+    | '/dashboard/influencers'
     | '/dashboard/intelligence'
+    | '/dashboard/reputation'
+    | '/dashboard/simulation'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/analytics'
     | '/dashboard/audience'
+    | '/dashboard/billing'
     | '/dashboard/campaigns'
+    | '/dashboard/collaboration'
     | '/dashboard/creative'
     | '/dashboard/crm'
+    | '/dashboard/influencers'
     | '/dashboard/intelligence'
+    | '/dashboard/reputation'
+    | '/dashboard/simulation'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,11 +204,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/simulation': {
+      id: '/dashboard/simulation'
+      path: '/simulation'
+      fullPath: '/dashboard/simulation'
+      preLoaderRoute: typeof DashboardSimulationRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/reputation': {
+      id: '/dashboard/reputation'
+      path: '/reputation'
+      fullPath: '/dashboard/reputation'
+      preLoaderRoute: typeof DashboardReputationRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/intelligence': {
       id: '/dashboard/intelligence'
       path: '/intelligence'
       fullPath: '/dashboard/intelligence'
       preLoaderRoute: typeof DashboardIntelligenceRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/influencers': {
+      id: '/dashboard/influencers'
+      path: '/influencers'
+      fullPath: '/dashboard/influencers'
+      preLoaderRoute: typeof DashboardInfluencersRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/crm': {
@@ -153,11 +246,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardCreativeRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/collaboration': {
+      id: '/dashboard/collaboration'
+      path: '/collaboration'
+      fullPath: '/dashboard/collaboration'
+      preLoaderRoute: typeof DashboardCollaborationRouteImport
+      parentRoute: typeof DashboardRoute
+    }
     '/dashboard/campaigns': {
       id: '/dashboard/campaigns'
       path: '/campaigns'
       fullPath: '/dashboard/campaigns'
       preLoaderRoute: typeof DashboardCampaignsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/billing': {
+      id: '/dashboard/billing'
+      path: '/billing'
+      fullPath: '/dashboard/billing'
+      preLoaderRoute: typeof DashboardBillingRouteImport
       parentRoute: typeof DashboardRoute
     }
     '/dashboard/audience': {
@@ -167,23 +274,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAudienceRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/dashboard/analytics': {
+      id: '/dashboard/analytics'
+      path: '/analytics'
+      fullPath: '/dashboard/analytics'
+      preLoaderRoute: typeof DashboardAnalyticsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
   }
 }
 
 interface DashboardRouteChildren {
+  DashboardAnalyticsRoute: typeof DashboardAnalyticsRoute
   DashboardAudienceRoute: typeof DashboardAudienceRoute
+  DashboardBillingRoute: typeof DashboardBillingRoute
   DashboardCampaignsRoute: typeof DashboardCampaignsRoute
+  DashboardCollaborationRoute: typeof DashboardCollaborationRoute
   DashboardCreativeRoute: typeof DashboardCreativeRoute
   DashboardCrmRoute: typeof DashboardCrmRoute
+  DashboardInfluencersRoute: typeof DashboardInfluencersRoute
   DashboardIntelligenceRoute: typeof DashboardIntelligenceRoute
+  DashboardReputationRoute: typeof DashboardReputationRoute
+  DashboardSimulationRoute: typeof DashboardSimulationRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAnalyticsRoute: DashboardAnalyticsRoute,
   DashboardAudienceRoute: DashboardAudienceRoute,
+  DashboardBillingRoute: DashboardBillingRoute,
   DashboardCampaignsRoute: DashboardCampaignsRoute,
+  DashboardCollaborationRoute: DashboardCollaborationRoute,
   DashboardCreativeRoute: DashboardCreativeRoute,
   DashboardCrmRoute: DashboardCrmRoute,
+  DashboardInfluencersRoute: DashboardInfluencersRoute,
   DashboardIntelligenceRoute: DashboardIntelligenceRoute,
+  DashboardReputationRoute: DashboardReputationRoute,
+  DashboardSimulationRoute: DashboardSimulationRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
