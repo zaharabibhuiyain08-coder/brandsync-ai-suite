@@ -18,15 +18,37 @@ export const Route = createFileRoute("/dashboard/intelligence")({
   head: () => ({ meta: [{ title: "Brand Intelligence — BrandSync AI" }] }),
 });
 
+type BrandProfile = {
+  name: string;
+  website: string;
+  logo: string | null; // data URL or SVG string
+  logoKind: "upload" | "ai" | "none";
+  trainedAt: string | null;
+  companyIndex: string; // unique copyright/patent index
+};
+
+const DEFAULT_BRAND: BrandProfile = {
+  name: "Acme",
+  website: "https://acme.io",
+  logo: null,
+  logoKind: "none",
+  trainedAt: "2026-04-22",
+  companyIndex: "BSX-AC-001928",
+};
+
 function Intelligence() {
+  const [brand, setBrand] = useState<BrandProfile>(DEFAULT_BRAND);
+
   return (
     <div>
       <PageHeader
         eyebrow="Intelligence Layer"
         title="Brand Intelligence"
         subtitle="The AI's permanent memory of your brand — voice, archetype, sentiment, vocabulary, and strategic positioning."
-        actions={<SetupWizard />}
+        actions={<SetupWizard brand={brand} onComplete={setBrand} />}
       />
+
+      <BrandIdentityBanner brand={brand} />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Brand Health Score" value="92 / 100" delta="+4 vs last mo" accent="emerald" />
