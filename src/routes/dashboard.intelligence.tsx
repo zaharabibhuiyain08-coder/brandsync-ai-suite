@@ -53,17 +53,8 @@ function Intelligence() {
               </div>
             </GlassCard>
 
-            <GlassCard>
-              <div className="flex items-center gap-2 text-sm text-indigo-300"><MessageSquare className="h-4 w-4" /> Tone of Voice</div>
-              <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
-                {[["Formality", 35],["Warmth", 78],["Authority", 82],["Playfulness", 54]].map(([k,v]) => (
-                  <div key={k as string}>
-                    <div className="flex justify-between text-xs text-muted-foreground"><span>{k}</span><span>{v}%</span></div>
-                    <div className="mt-1 h-1.5 rounded-full bg-white/5"><div className="h-full rounded-full bg-gradient-to-r from-indigo-400 to-purple-500" style={{ width: `${v}%` }} /></div>
-                  </div>
-                ))}
-              </div>
-            </GlassCard>
+            <BrandVoiceStudio />
+
 
             <GlassCard>
               <div className="flex items-center gap-2 text-sm text-emerald-300"><Heart className="h-4 w-4" /> Emotional Positioning</div>
