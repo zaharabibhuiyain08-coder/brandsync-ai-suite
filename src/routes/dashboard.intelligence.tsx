@@ -182,7 +182,16 @@ function BrandIdentityBanner({ brand }: { brand: BrandProfile }) {
             {brand.trainedAt && <Pill tone="emerald">Trained {brand.trainedAt}</Pill>}
           </div>
           <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-            <Globe className="h-3 w-3" /> <span className="truncate">{brand.website}</span>
+            <Globe className="h-3 w-3 flex-none" />
+            <a
+              href={/^https?:\/\//i.test(brand.website) ? brand.website : `https://${brand.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="truncate hover:text-indigo-300 hover:underline underline-offset-2 transition-colors"
+              title={brand.website}
+            >
+              {brand.website}
+            </a>
           </div>
         </div>
         <div className="hidden md:flex items-center gap-1.5 text-[11px] text-emerald-300/80 max-w-[260px] text-right">
