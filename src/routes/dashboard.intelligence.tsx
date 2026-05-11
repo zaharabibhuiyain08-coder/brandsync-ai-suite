@@ -147,9 +147,103 @@ function Intelligence() {
   );
 }
 
-function SetupWizard() {
+function LogoMark({ brand, size = 40 }: { brand: BrandProfile; size?: number }) {
+  if (brand.logo) {
+    return (
+      <img
+        src={brand.logo}
+        alt={`${brand.name} logo`}
+        style={{ width: size, height: size }}
+        className="rounded-xl object-cover bg-white/5 border border-white/10"
+      />
+    );
+  }
+  const initials = brand.name.split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase() || "B";
+  return (
+    <div
+      style={{ width: size, height: size, fontSize: size * 0.4 }}
+      className="rounded-xl border border-white/10 bg-gradient-to-br from-indigo-500 via-purple-600 to-fuchsia-500 flex items-center justify-center font-semibold text-white shadow-lg"
+    >
+      {initials}
+    </div>
+  );
+}
+
+function BrandIdentityBanner({ brand }: { brand: BrandProfile }) {
+  return (
+    <GlassCard className="mb-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-transparent pointer-events-none" />
+      <div className="relative flex items-center gap-4">
+        <LogoMark brand={brand} size={56} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="text-lg font-semibold truncate">{brand.name}</div>
+            <Pill tone="indigo">Index · {brand.companyIndex}</Pill>
+            {brand.trainedAt && <Pill tone="emerald">Trained {brand.trainedAt}</Pill>}
+          </div>
+          <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+            <Globe className="h-3 w-3" /> <span className="truncate">{brand.website}</span>
+          </div>
+        </div>
+        <div className="hidden md:flex items-center gap-1.5 text-[11px] text-emerald-300/80 max-w-[260px] text-right">
+          <ShieldCheck className="h-3.5 w-3.5 flex-none" />
+          <span>Generated insights, data &amp; creative © {brand.name}. Copyright &amp; patent rights retained by the company.</span>
+        </div>
+      </div>
+    </GlassCard>
+  );
+}
+
+function SetupWizard({ brand, onComplete }: { brand: BrandProfile; onComplete: (b: BrandProfile) => void }) {
   const [step, setStep] = useState(1);
   const [open, setOpen] = useState(false);
+  const [name, setName] = useState(brand.name);
+  const [website, setWebsite] = useState(brand.website);
+  const [logo, setLogo] = useState<string | null>(brand.logo);
+  const [logoKind, setLogoKind] = useState<BrandProfile["logoKind"]>(brand.logoKind);
+  const [generatingLogo, setGeneratingLogo] = useState(false);
+  const [pdfUploaded, setPdfUploaded] = useState(false);
+
+  const totalSteps = 4;
+
+  function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setLogo(reader.result as string);
+      setLogoKind("upload");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function aiGenerateLogo() {
+    setGeneratingLogo(true);
+    setTimeout(() => {
+      const initials = (name || "B").split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase();
+      const hueA = Math.floor(Math.random() * 360);
+      const hueB = (hueA + 60) % 360;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${hueA},85%,60%)"/><stop offset="1" stop-color="hsl(${hueB},85%,55%)"/></linearGradient></defs><rect width="128" height="128" rx="28" fill="url(#g)"/><circle cx="64" cy="64" r="34" fill="none" stroke="white" stroke-opacity="0.35" stroke-width="2"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-family="Inter, system-ui, sans-serif" font-size="48" font-weight="700" fill="white">${initials}</text></svg>`;
+      const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+      setLogo(dataUrl);
+      setLogoKind("ai");
+      setGeneratingLogo(false);
+    }, 1200);
+  }
+
+  function finish() {
+    const idx = "BSX-" + (name || "BR").replace(/\s+/g, "").slice(0,2).toUpperCase() + "-" + Math.floor(100000 + Math.random()*899999);
+    onComplete({
+      name: name || "Untitled Brand",
+      website: website || "https://example.com",
+      logo,
+      logoKind,
+      trainedAt: new Date().toISOString().slice(0,10),
+      companyIndex: idx,
+    });
+    setOpen(false);
+    setStep(1);
+  }
 
   return (
     <Dialog open={open} onOpenChange={(o) => { setOpen(o); if (!o) setStep(1); }}>
@@ -164,7 +258,7 @@ function SetupWizard() {
         </DialogHeader>
 
         <div className="flex items-center gap-2 mb-4">
-          {[1,2,3].map((n) => (
+          {Array.from({ length: totalSteps }, (_, i) => i + 1).map((n) => (
             <div key={n} className={`flex-1 h-1 rounded-full ${step >= n ? "bg-gradient-to-r from-indigo-500 to-purple-600" : "bg-white/10"}`} />
           ))}
         </div>
@@ -173,45 +267,101 @@ function SetupWizard() {
           {step === 1 && (
             <div className="space-y-3">
               <div className="text-sm text-muted-foreground">Step 1 · Connect your digital footprint</div>
-              <div className="relative"><Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="https://yourbrand.com" defaultValue="https://acme.io" className="pl-9 bg-white/5 border-white/10" /></div>
+              <Input placeholder="Brand / company name" value={name} onChange={(e) => setName(e.target.value)} className="bg-white/5 border-white/10" />
+              <div className="relative"><Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" /><Input placeholder="https://yourbrand.com" value={website} onChange={(e) => setWebsite(e.target.value)} className="pl-9 bg-white/5 border-white/10" /></div>
               <Input placeholder="Instagram handle" defaultValue="@acme.official" className="bg-white/5 border-white/10" />
               <Input placeholder="LinkedIn / X / TikTok" defaultValue="linkedin.com/company/acme" className="bg-white/5 border-white/10" />
             </div>
           )}
           {step === 2 && (
-            <div>
-              <div className="text-sm text-muted-foreground mb-3">Step 2 · Upload assets</div>
-              <div className="rounded-xl border-2 border-dashed border-white/15 p-8 text-center bg-white/[0.02]">
-                <Upload className="h-6 w-6 mx-auto text-indigo-400" />
-                <div className="mt-2 text-sm">Drop brand guidelines, ads, videos, decks</div>
-                <div className="text-xs text-muted-foreground">PDF, MP4, PNG · up to 500MB</div>
+            <div className="space-y-3">
+              <div className="text-sm text-muted-foreground">Step 2 · Attach or generate your logo</div>
+              <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.03] p-3">
+                <LogoMark brand={{ ...brand, name, logo, logoKind }} size={64} />
+                <div className="flex-1 text-xs text-muted-foreground">
+                  {logo ? (logoKind === "ai" ? "AI-generated logo ready. You can regenerate or replace." : "Custom logo attached.") : "No logo yet — upload your own or let AI generate one based on your brand name."}
+                </div>
               </div>
-              <div className="mt-3 space-y-1.5 text-xs">
-                {["acme-brand-guidelines.pdf","spring-campaign-reel.mp4","press-kit-2025.zip"].map(f => (
-                  <div key={f} className="flex items-center justify-between rounded-md bg-white/5 px-3 py-2"><span>{f}</span><Check className="h-3.5 w-3.5 text-emerald-400" /></div>
-                ))}
+
+              <div className="grid grid-cols-2 gap-2">
+                <label className="cursor-pointer rounded-xl border-2 border-dashed border-white/15 p-4 text-center bg-white/[0.02] hover:border-indigo-400/50 transition">
+                  <Upload className="h-5 w-5 mx-auto text-indigo-400" />
+                  <div className="mt-1.5 text-xs font-medium">Upload logo</div>
+                  <div className="text-[10px] text-muted-foreground">PNG, SVG, JPG</div>
+                  <input type="file" accept="image/*" className="hidden" onChange={handleLogoUpload} />
+                </label>
+                <button
+                  type="button"
+                  onClick={aiGenerateLogo}
+                  disabled={generatingLogo}
+                  className="rounded-xl border border-white/10 p-4 text-center bg-gradient-to-br from-indigo-500/10 to-purple-600/10 hover:from-indigo-500/20 hover:to-purple-600/20 transition disabled:opacity-60"
+                >
+                  {generatingLogo ? (
+                    <RefreshCw className="h-5 w-5 mx-auto text-purple-300 animate-spin" />
+                  ) : (
+                    <Wand2 className="h-5 w-5 mx-auto text-purple-300" />
+                  )}
+                  <div className="mt-1.5 text-xs font-medium">{generatingLogo ? "Generating…" : "Generate with AI"}</div>
+                  <div className="text-[10px] text-muted-foreground">From brand name & vibe</div>
+                </button>
               </div>
+              {logo && (
+                <button type="button" onClick={() => { setLogo(null); setLogoKind("none"); }} className="text-[11px] text-muted-foreground hover:text-foreground underline">
+                  Remove logo
+                </button>
+              )}
             </div>
           )}
           {step === 3 && (
+            <div>
+              <div className="text-sm text-muted-foreground mb-3">Step 3 · Upload brand PDF &amp; supporting assets</div>
+              <label className="cursor-pointer block rounded-xl border-2 border-dashed border-white/15 p-8 text-center bg-white/[0.02] hover:border-indigo-400/50 transition">
+                <Upload className="h-6 w-6 mx-auto text-indigo-400" />
+                <div className="mt-2 text-sm">Drop brand guidelines PDF, ads, videos, decks</div>
+                <div className="text-xs text-muted-foreground">PDF, MP4, PNG · up to 500MB</div>
+                <input type="file" accept=".pdf,.mp4,.png,.jpg,.zip" className="hidden" onChange={() => setPdfUploaded(true)} />
+              </label>
+              <div className="mt-3 space-y-1.5 text-xs">
+                {[
+                  { f: `${(name || "brand").toLowerCase().replace(/\s+/g,"-")}-brand-guidelines.pdf`, icon: FileText },
+                  { f: "spring-campaign-reel.mp4", icon: ImageIcon },
+                  { f: "press-kit-2025.zip", icon: FileText },
+                ].map(({f, icon: Icon}) => (
+                  <div key={f} className="flex items-center justify-between rounded-md bg-white/5 px-3 py-2">
+                    <span className="flex items-center gap-2"><Icon className="h-3.5 w-3.5 text-indigo-300" />{f}</span>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                  </div>
+                ))}
+                {pdfUploaded && (
+                  <div className="flex items-center justify-between rounded-md bg-emerald-500/10 border border-emerald-500/30 px-3 py-2">
+                    <span className="flex items-center gap-2"><FileText className="h-3.5 w-3.5 text-emerald-300" />your-uploaded-file.pdf</span>
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+          {step === 4 && (
             <div className="rounded-xl bg-black/40 border border-white/10 p-4 font-mono text-xs text-emerald-300/90 space-y-1 h-56 overflow-hidden relative">
               <div className="shimmer absolute inset-0" />
-              <div>$ brandsync.train --workspace acme</div>
-              <div>› Crawling 412 pages…  <span className="text-emerald-400">done</span></div>
+              <div>$ brandsync.train --workspace {(name || "brand").toLowerCase().replace(/\s+/g,"-")}</div>
+              <div>› Indexing logo &amp; visual identity… <span className="text-emerald-400">done</span></div>
+              <div>› Crawling {website}…  <span className="text-emerald-400">412 pages</span></div>
+              <div>› Parsing brand PDF &amp; assets…</div>
               <div>› Extracting palette: oklch(0.65 0.22 280) +6 …</div>
               <div>› Mapping vocabulary: 8,142 tokens</div>
               <div>› Modeling sentiment across 18 channels…</div>
               <div>› Detecting archetype: <span className="text-purple-300">Visionary Magician</span></div>
-              <div>› Synthesizing tone matrix…</div>
-              <div className="text-indigo-300">› Brand AI ready ✨</div>
+              <div>› Sealing company index &amp; copyright manifest…</div>
+              <div className="text-indigo-300">› Brand AI ready ✨ Dashboard regenerating with your data.</div>
             </div>
           )}
         </motion.div>
 
         <div className="flex justify-between mt-5">
           <Button variant="ghost" onClick={() => setStep(s => Math.max(1, s-1))} disabled={step === 1}>Back</Button>
-          <Button onClick={() => step < 3 ? setStep(s => s+1) : setOpen(false)} className="bg-gradient-to-r from-indigo-500 to-purple-600">
-            {step < 3 ? "Continue" : "Finish"}
+          <Button onClick={() => step < totalSteps ? setStep(s => s+1) : finish()} className="bg-gradient-to-r from-indigo-500 to-purple-600">
+            {step < totalSteps ? "Continue" : "Finish & generate dashboard"}
           </Button>
         </div>
       </DialogContent>
