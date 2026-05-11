@@ -76,7 +76,10 @@ function Intelligence() {
               </div>
             </GlassCard>
           </div>
+
+          <ImprovementAreas />
         </TabsContent>
+
 
         <TabsContent value="competitors" className="mt-5">
           <GlassCard className="h-[420px]">
