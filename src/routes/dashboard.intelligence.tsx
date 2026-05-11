@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Brain, Upload, Globe, Sparkles, Check, Target, Heart, MessageSquare, Compass, TrendingUp, AlertTriangle, Wand2, RefreshCw, Copy } from "lucide-react";
+import { Brain, Upload, Globe, Sparkles, Check, Target, Heart, MessageSquare, Compass, TrendingUp, AlertTriangle, Wand2, RefreshCw, Copy, Image as ImageIcon, ShieldCheck, FileText } from "lucide-react";
 import { PageHeader, GlassCard, StatCard, Pill } from "@/components/app/ui";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
