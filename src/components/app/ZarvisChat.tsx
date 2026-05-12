@@ -7,10 +7,10 @@ import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
 const SUGGESTIONS = [
-  "Audit my brand positioning",
+  "How do I generate social media content?",
+  "Walk me through onboarding a new brand",
+  "Design a launch banner for a Gen Z sneaker drop",
   "Why is my CTR dropping?",
-  "Suggest a campaign for Gen Z",
-  "Improve my brand voice",
 ];
 
 const GREETING: UIMessage = {
