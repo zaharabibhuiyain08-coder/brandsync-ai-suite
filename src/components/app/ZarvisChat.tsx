@@ -149,8 +149,8 @@ export function ZarvisChat() {
             {/* Messages */}
             <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
               {messages.map((m) => {
-                const text = partsToText(m);
                 const isUser = m.role === "user";
+                const userText = isUser ? partsToText(m) : "";
                 return (
                   <motion.div
                     key={m.id}
@@ -165,18 +165,65 @@ export function ZarvisChat() {
                     )}
                     <div
                       className={cn(
-                        "max-w-[82%] text-[13px] leading-relaxed",
+                        "max-w-[82%] text-[13px] leading-relaxed space-y-2",
                         isUser
                           ? "rounded-2xl rounded-br-sm bg-gradient-to-br from-indigo-500 to-violet-600 text-white px-3.5 py-2 shadow-md"
                           : "text-foreground/90"
                       )}
                     >
                       {isUser ? (
-                        <p className="whitespace-pre-wrap">{text}</p>
+                        <p className="whitespace-pre-wrap">{userText}</p>
                       ) : (
-                        <div className="prose prose-invert prose-sm max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-indigo-200 prose-headings:text-white prose-a:text-indigo-300">
-                          <ReactMarkdown>{text || "…"}</ReactMarkdown>
-                        </div>
+                        (m.parts as AnyPart[]).map((p, i) => {
+                          if (p.type === "text") {
+                            return (
+                              <div
+                                key={i}
+                                className="prose prose-invert prose-sm max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-ol:my-1.5 prose-li:my-0 prose-strong:text-indigo-200 prose-headings:text-white prose-a:text-indigo-300"
+                              >
+                                <ReactMarkdown>{p.text || ""}</ReactMarkdown>
+                              </div>
+                            );
+                          }
+                          if (p.type === "tool-generateImage" || p.toolName === "generateImage") {
+                            const out = p.output;
+                            const promptText = p.input?.prompt || out?.prompt;
+                            if (out?.image) {
+                              return (
+                                <figure
+                                  key={i}
+                                  className="rounded-xl overflow-hidden border border-white/10 bg-black/30"
+                                >
+                                  <img
+                                    src={out.image}
+                                    alt={promptText || "Generated visual"}
+                                    className="w-full h-auto block"
+                                  />
+                                  {promptText && (
+                                    <figcaption className="px-2.5 py-1.5 text-[10px] text-white/60 border-t border-white/5">
+                                      <ImageIcon className="inline h-3 w-3 mr-1 -mt-0.5" />
+                                      {promptText}
+                                    </figcaption>
+                                  )}
+                                </figure>
+                              );
+                            }
+                            if (out?.error) {
+                              return (
+                                <div key={i} className="text-[11px] text-rose-300/90 bg-rose-500/10 border border-rose-500/20 rounded-lg px-2.5 py-1.5">
+                                  Couldn't generate that image: {out.error}
+                                </div>
+                              );
+                            }
+                            return (
+                              <div key={i} className="flex items-center gap-2 text-[11px] text-indigo-200/80 bg-white/5 border border-white/10 rounded-lg px-2.5 py-1.5">
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                                Designing visual…
+                              </div>
+                            );
+                          }
+                          return null;
+                        })
                       )}
                     </div>
                   </motion.div>
