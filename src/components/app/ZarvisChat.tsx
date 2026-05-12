@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Send, Sparkles, X, Minimize2, Loader2 } from "lucide-react";
+import { Bot, Send, Sparkles, X, Minimize2, Loader2, ImageIcon } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
