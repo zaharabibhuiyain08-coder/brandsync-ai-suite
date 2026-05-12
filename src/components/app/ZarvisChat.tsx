@@ -29,6 +29,14 @@ function partsToText(m: UIMessage): string {
   return m.parts.map((p) => (p.type === "text" ? p.text : "")).join("");
 }
 
+type AnyPart = UIMessage["parts"][number] & {
+  type: string;
+  toolName?: string;
+  state?: string;
+  input?: { prompt?: string };
+  output?: { image?: string; prompt?: string; error?: string };
+};
+
 export function ZarvisChat() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
