@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/app/ThemeToggle";
+import { RegisterDemoModal } from "@/components/app/RegisterDemoModal";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -48,24 +50,26 @@ const TIERS = [
 ];
 
 function Landing() {
+  const [demoOpen, setDemoOpen] = useState(false);
   return (
     <div className="min-h-screen text-foreground overflow-x-hidden">
-      <Nav />
-      <Hero />
+      <Nav onOpenDemo={() => setDemoOpen(true)} />
+      <Hero onOpenDemo={() => setDemoOpen(true)} />
       <Marquee />
       <Bento />
       <ReplacementCalculator />
       <Pricing />
       <CTA />
       <Footer />
+      <RegisterDemoModal open={demoOpen} onOpenChange={setDemoOpen} />
     </div>
   );
 }
 
-function Nav() {
+function Nav({ onOpenDemo }: { onOpenDemo: () => void }) {
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/5 bg-[#07090f]/70 backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 border-b border-white/5 bg-[color:var(--app-bg)]/70 backdrop-blur-xl">
+      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 grid place-items-center glow-primary">
             <Zap className="h-4 w-4 text-white" />
@@ -73,13 +77,22 @@ function Nav() {
           <span className="font-semibold">BrandSync <span className="text-indigo-400">AI</span></span>
         </Link>
         <div className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-          <a href="#features" className="hover:text-white">Platform</a>
-          <a href="#calc" className="hover:text-white">Replace Stack</a>
-          <a href="#pricing" className="hover:text-white">Pricing</a>
+          <a href="#features" className="hover:text-foreground">Platform</a>
+          <a href="#calc" className="hover:text-foreground">Replace Stack</a>
+          <a href="#pricing" className="hover:text-foreground">Pricing</a>
         </div>
-        <Link to="/dashboard/intelligence" className="inline-flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-3 h-9 text-sm hover:bg-white/10">
-          Enter Dashboard <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={onOpenDemo}
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-3.5 h-9 text-sm font-medium glow-primary hover:scale-[1.02] transition"
+          >
+            <Sparkles className="h-3.5 w-3.5" /> Free Demo Registration
+          </button>
+          <Link to="/dashboard/intelligence" className="hidden sm:inline-flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-3 h-9 text-sm hover:bg-white/10">
+            Dashboard <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </nav>
   );
