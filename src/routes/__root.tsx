@@ -10,6 +10,8 @@ import {
 
 import appCss from "../styles.css?url";
 import { ZarvisChat } from "@/components/app/ZarvisChat";
+import { ThemeProvider } from "@/components/app/ThemeProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
   return (
@@ -114,8 +116,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <ZarvisChat />
+      <ThemeProvider>
+        <Outlet />
+        <ZarvisChat />
+        <Toaster richColors position="top-right" />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
