@@ -94,7 +94,14 @@ export function Sidebar() {
                       />
                     )}
                     <Icon className={cn("h-4 w-4 shrink-0", active && "text-indigo-300")} />
-                    {!collapsed && <span className="truncate">{it.label}</span>}
+                    {!collapsed && (
+                      <span className="truncate flex-1 flex items-center gap-2">
+                        {it.label}
+                        {"badge" in it && it.badge && (
+                          <span className="ml-auto rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 px-1.5 py-0.5 text-[8px] uppercase tracking-wider text-white font-semibold">{it.badge}</span>
+                        )}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
