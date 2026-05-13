@@ -98,7 +98,7 @@ function Nav({ onOpenDemo }: { onOpenDemo: () => void }) {
   );
 }
 
-function Hero() {
+function Hero({ onOpenDemo }: { onOpenDemo: () => void }) {
   return (
     <section className="relative">
       <div className="absolute inset-0 grid-bg opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]" />
@@ -133,9 +133,9 @@ function Hero() {
           <Link to="/dashboard/intelligence" className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-5 h-12 font-medium glow-primary hover:scale-[1.02] transition">
             Enter Dashboard <ArrowRight className="h-4 w-4" />
           </Link>
-          <a href="#calc" className="inline-flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-5 h-12 font-medium hover:bg-white/10">
-            Request Demo
-          </a>
+          <button onClick={onOpenDemo} className="inline-flex items-center gap-2 rounded-lg bg-white/5 border border-white/10 px-5 h-12 font-medium hover:bg-white/10">
+            <Sparkles className="h-4 w-4" /> Free Demo Registration
+          </button>
         </motion.div>
 
         {/* Floating product mock */}
