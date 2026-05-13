@@ -2,12 +2,15 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Sparkles, Megaphone, Users, Contact, Star, Shield,
-  BarChart3, Layers, Atom, ChevronLeft, Zap, CreditCard
+  BarChart3, Layers, Atom, ChevronLeft, Zap, CreditCard, FileText
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
+  { group: "AI Tools", items: [
+    { to: "/dashboard/brand-guideline", label: "Brand Guideline Generator", icon: FileText, badge: "New" },
+  ]},
   { group: "Intelligence", items: [
     { to: "/dashboard/intelligence", label: "Brand Intelligence", icon: Brain },
     { to: "/dashboard/audience", label: "Audience Intelligence", icon: Users },
@@ -91,7 +94,14 @@ export function Sidebar() {
                       />
                     )}
                     <Icon className={cn("h-4 w-4 shrink-0", active && "text-indigo-300")} />
-                    {!collapsed && <span className="truncate">{it.label}</span>}
+                    {!collapsed && (
+                      <span className="truncate flex-1 flex items-center gap-2">
+                        {it.label}
+                        {"badge" in it && it.badge && (
+                          <span className="ml-auto rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 px-1.5 py-0.5 text-[8px] uppercase tracking-wider text-white font-semibold">{it.badge}</span>
+                        )}
+                      </span>
+                    )}
                   </Link>
                 );
               })}
