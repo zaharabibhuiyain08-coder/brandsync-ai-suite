@@ -2,12 +2,15 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Sparkles, Megaphone, Users, Contact, Star, Shield,
-  BarChart3, Layers, Atom, ChevronLeft, Zap, CreditCard
+  BarChart3, Layers, Atom, ChevronLeft, Zap, CreditCard, FileText
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
+  { group: "AI Tools", items: [
+    { to: "/dashboard/brand-guideline", label: "Brand Guideline Generator", icon: FileText, badge: "New" },
+  ]},
   { group: "Intelligence", items: [
     { to: "/dashboard/intelligence", label: "Brand Intelligence", icon: Brain },
     { to: "/dashboard/audience", label: "Audience Intelligence", icon: Users },
