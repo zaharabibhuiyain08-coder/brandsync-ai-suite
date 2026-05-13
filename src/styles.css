@@ -46,8 +46,8 @@
   --color-neon: var(--neon);
 }
 
-/* Force dark-only enterprise AI aesthetic */
-:root {
+/* Default (dark) tokens */
+:root, .dark {
   --radius: 0.75rem;
   --background: oklch(0.145 0.02 265);
   --foreground: oklch(0.985 0.005 250);
@@ -84,30 +84,60 @@
   --sidebar-accent-foreground: oklch(0.985 0.005 250);
   --sidebar-border: oklch(1 0 0 / 0.08);
   --sidebar-ring: oklch(0.65 0.22 280);
+  --app-bg: #07090f;
+  --glass-tint: white;
+}
+
+/* Light theme overrides */
+.light {
+  --background: oklch(0.985 0.005 250);
+  --foreground: oklch(0.18 0.02 265);
+  --card: oklch(1 0 0 / 0.7);
+  --card-foreground: oklch(0.18 0.02 265);
+  --popover: oklch(0.99 0 0);
+  --popover-foreground: oklch(0.18 0.02 265);
+  --primary: oklch(0.55 0.22 280);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0.01 260);
+  --secondary-foreground: oklch(0.2 0.02 265);
+  --muted: oklch(0.95 0.01 260);
+  --muted-foreground: oklch(0.45 0.02 260);
+  --accent: oklch(0.55 0.24 295);
+  --accent-foreground: oklch(0.99 0 0);
+  --border: oklch(0 0 0 / 0.1);
+  --input: oklch(0 0 0 / 0.08);
+  --ring: oklch(0.55 0.22 280);
+  --sidebar: oklch(0.98 0.005 260);
+  --sidebar-foreground: oklch(0.2 0.02 265);
+  --sidebar-accent: oklch(0.94 0.01 260);
+  --sidebar-accent-foreground: oklch(0.2 0.02 265);
+  --sidebar-border: oklch(0 0 0 / 0.08);
+  --app-bg: #f4f5fa;
+  --glass-tint: black;
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html, body { background: #07090f; color: var(--color-foreground); }
+  html, body { background: var(--app-bg); color: var(--color-foreground); transition: background-color 0.3s ease, color 0.3s ease; }
   body {
     background-image:
-      radial-gradient(ellipse 80% 60% at 20% -10%, oklch(0.35 0.18 280 / 0.25), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 100% 10%, oklch(0.35 0.18 295 / 0.18), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 50% 110%, oklch(0.35 0.18 200 / 0.12), transparent 60%);
+      radial-gradient(ellipse 80% 60% at 20% -10%, oklch(0.55 0.18 280 / 0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 100% 10%, oklch(0.55 0.18 295 / 0.14), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 50% 110%, oklch(0.55 0.18 200 / 0.10), transparent 60%);
     background-attachment: fixed;
   }
 }
 
 @layer utilities {
   .glass {
-    background: color-mix(in oklab, white 4%, transparent);
+    background: color-mix(in oklab, var(--glass-tint) 4%, transparent);
     backdrop-filter: blur(14px);
-    border: 1px solid color-mix(in oklab, white 10%, transparent);
+    border: 1px solid color-mix(in oklab, var(--glass-tint) 10%, transparent);
   }
   .glass-strong {
-    background: color-mix(in oklab, white 7%, transparent);
+    background: color-mix(in oklab, var(--glass-tint) 7%, transparent);
     backdrop-filter: blur(18px);
-    border: 1px solid color-mix(in oklab, white 12%, transparent);
+    border: 1px solid color-mix(in oklab, var(--glass-tint) 12%, transparent);
   }
   .text-gradient {
     background: linear-gradient(120deg, oklch(0.78 0.2 280), oklch(0.78 0.22 295), oklch(0.85 0.18 200));
