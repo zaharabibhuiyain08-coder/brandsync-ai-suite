@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createLovableAiGatewayProvider } from "@/lib/ai-gateway";
-import { generateText, Output } from "ai";
+import { generateText } from "ai";
 import { z } from "zod";
 
 const InputSchema = z.object({
@@ -76,12 +76,19 @@ Requirements:
 Return strict JSON matching the provided schema.`;
 
     try {
-      const { experimental_output: output } = await generateText({
+      const { text } = await generateText({
         model,
-        prompt,
-        experimental_output: Output.object({ schema: GuidelineSchema }),
+        prompt: prompt + "\n\nReturn ONLY a single valid JSON object — no markdown, no commentary, no code fences.",
       });
-      return { guideline: output, error: null };
+      // Strip code fences if model added them
+      const cleaned = text.trim().replace(/^```(?:json)?\s*/i, "").replace(/```\s*$/i, "");
+      const parsed = JSON.parse(cleaned);
+      const result = GuidelineSchema.safeParse(parsed);
+      if (!result.success) {
+        console.error("Schema validation failed:", result.error.issues);
+        return { guideline: null, error: "AI returned an invalid structure. Please try again." };
+      }
+      return { guideline: result.data, error: null };
     } catch (e) {
       console.error("generateBrandGuideline failed:", e);
       const msg = e instanceof Error ? e.message : "Generation failed";
