@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Brain, Upload, Globe, Sparkles, Check, Target, Heart, MessageSquare, Compass, TrendingUp, AlertTriangle, Wand2, RefreshCw, Copy, Image as ImageIcon, ShieldCheck, FileText } from "lucide-react";
+import { Brain, Upload, Globe, Sparkles, Check, Target, Heart, MessageSquare, Compass, TrendingUp, AlertTriangle, Wand2, RefreshCw, Copy, Image as ImageIcon, ShieldCheck, FileText, BarChart3 } from "lucide-react";
 import { PageHeader, GlassCard, StatCard, Pill } from "@/components/app/ui";
+import { TrafficAnalyzer } from "@/components/app/TrafficAnalyzer";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -60,6 +61,7 @@ function Intelligence() {
       <Tabs defaultValue="identity" className="w-full">
         <TabsList className="bg-white/5 border border-white/10">
           <TabsTrigger value="identity">Identity</TabsTrigger>
+          <TabsTrigger value="traffic"><BarChart3 className="h-3.5 w-3.5 mr-1.5" /> Traffic Analyzer</TabsTrigger>
           <TabsTrigger value="competitors">Competitors</TabsTrigger>
           <TabsTrigger value="strategy">Strategy</TabsTrigger>
         </TabsList>
@@ -102,6 +104,10 @@ function Intelligence() {
           <ImprovementAreas />
         </TabsContent>
 
+
+        <TabsContent value="traffic" className="mt-5">
+          <TrafficAnalyzer domain={brand.website} />
+        </TabsContent>
 
         <TabsContent value="competitors" className="mt-5">
           <GlassCard className="h-[420px]">
