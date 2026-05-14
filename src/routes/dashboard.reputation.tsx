@@ -31,7 +31,19 @@ function Reputation() {
         )}
       </AnimatePresence>
 
-      <PageHeader eyebrow="Listening" title="Brand Reputation Radar" subtitle="Real-time social mentions, sentiment scoring, and AI-drafted crisis responses." />
+      <PageHeader
+        eyebrow="Listening"
+        title="Brand Reputation Radar"
+        subtitle="Real-time social mentions, sentiment scoring, and AI-drafted crisis responses."
+        actions={
+          <div className="flex items-center gap-2">
+            <Button variant="outline" className="bg-white/5 border-white/10"><Filter className="h-4 w-4 mr-1.5" /> Filters</Button>
+            <Button className="bg-gradient-to-r from-indigo-500 to-purple-600 glow-primary" onClick={() => toast.success("Bulk reply queue opened · 12 drafts ready")}>
+              <Zap className="h-4 w-4 mr-1.5" /> Bulk reply with AI
+            </Button>
+          </div>
+        }
+      />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <StatCard label="Mentions (24h)" value="2,148" delta="+18%" accent="indigo" />
@@ -39,6 +51,8 @@ function Reputation() {
         <StatCard label="Negative Spikes" value="3" delta="+1 today" accent="rose" />
         <StatCard label="Auto-Responses Sent" value="84" accent="purple" />
       </div>
+
+      <ActionCenter />
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-5">
         <GlassCard className="h-[420px]">
