@@ -112,3 +112,106 @@ function Reputation() {
     </div>
   );
 }
+
+type Priority = {
+  id: string;
+  title: string;
+  channel: string;
+  severity: "Critical" | "High" | "Medium";
+  signal: string;
+  recommendation: string;
+  eta: string;
+  tone: "rose" | "indigo" | "purple" | "emerald";
+};
+
+const PRIORITIES: Priority[] = [
+  {
+    id: "p1",
+    title: "Shipping-delay narrative gaining traction",
+    channel: "X · Instagram",
+    severity: "Critical",
+    signal: "84 mentions · sentiment -0.62 · velocity ×4.1",
+    recommendation: "Post acknowledgement thread + DM top 12 amplifiers with refund status.",
+    eta: "Act in < 30 min",
+    tone: "rose",
+  },
+  {
+    id: "p2",
+    title: "Pricing pushback from solopreneur segment",
+    channel: "Reddit · X",
+    severity: "High",
+    signal: "37 mentions · sentiment -0.31",
+    recommendation: "Surface starter-tier value prop; pin a comparison reply on r/SaaS thread.",
+    eta: "Act today",
+    tone: "purple",
+  },
+  {
+    id: "p3",
+    title: "Power-user love for predictive simulation",
+    channel: "LinkedIn · X",
+    severity: "Medium",
+    signal: "118 positive mentions · 4 quote-worthy",
+    recommendation: "Convert top 3 quotes into social proof tiles + reply-thank-share.",
+    eta: "This week",
+    tone: "emerald",
+  },
+];
+
+function ActionCenter() {
+  const [filter, setFilter] = useState<"all" | "negative" | "positive">("all");
+  const visible = PRIORITIES.filter(p => filter === "all" ? true : filter === "negative" ? p.tone === "rose" || p.tone === "purple" : p.tone === "emerald");
+
+  return (
+    <div className="mb-5">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <div className="flex items-center gap-2 text-sm text-indigo-300"><Flame className="h-4 w-4" /> Action Center</div>
+          <div className="text-xs text-muted-foreground">Prioritized issues with one-click responses — ranked by impact &amp; velocity.</div>
+        </div>
+        <div className="flex items-center gap-1.5 text-xs">
+          {(["all","negative","positive"] as const).map(f => (
+            <button key={f} onClick={() => setFilter(f)} className={cn("rounded-md px-2.5 py-1 border border-white/10", filter === f ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-transparent" : "bg-white/5 hover:bg-white/10 text-foreground/70")}>
+              {f === "all" ? "All" : f === "negative" ? "Risks" : "Opportunities"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {visible.map(p => (
+          <GlassCard key={p.id} className="relative overflow-hidden">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-2">
+                {p.tone === "rose" ? <ShieldAlert className="h-4 w-4 text-rose-300" /> : p.tone === "emerald" ? <Megaphone className="h-4 w-4 text-emerald-300" /> : <AlertTriangle className="h-4 w-4 text-purple-300" />}
+                <div className="text-sm font-semibold leading-tight">{p.title}</div>
+              </div>
+              <Pill tone={p.tone}>{p.severity}</Pill>
+            </div>
+            <div className="mt-2 text-[11px] text-muted-foreground flex items-center gap-2">
+              <MessageCircle className="h-3 w-3" /> {p.channel} · <span className="text-foreground/70">{p.signal}</span>
+            </div>
+            <div className="mt-3 rounded-md bg-white/[0.03] border border-white/5 p-2.5 text-xs text-foreground/85 flex gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-indigo-300 mt-0.5 flex-none" />
+              <span>{p.recommendation}</span>
+            </div>
+            <div className="mt-2 text-[11px] text-rose-300/90 flex items-center gap-1.5"><Bell className="h-3 w-3" /> {p.eta}</div>
+            <div className="mt-3 grid grid-cols-2 gap-1.5">
+              <Button size="sm" className="h-7 text-xs bg-gradient-to-r from-indigo-500 to-purple-600" onClick={() => toast.success("AI reply queued for approval")}>
+                <Reply className="h-3 w-3 mr-1" /> Reply with AI
+              </Button>
+              <Button size="sm" variant="outline" className="h-7 text-xs bg-white/5 border-white/10" onClick={() => toast("Escalated to CX lead")}>
+                <ArrowRight className="h-3 w-3 mr-1" /> Escalate
+              </Button>
+              <Button size="sm" variant="ghost" className="h-7 text-xs col-span-1" onClick={() => toast("Ticket created in CRM")}>
+                <Ticket className="h-3 w-3 mr-1" /> Ticket
+              </Button>
+              <Button size="sm" variant="ghost" className="h-7 text-xs col-span-1" onClick={() => toast.success("Marked resolved")}>
+                <CheckCircle2 className="h-3 w-3 mr-1" /> Resolve
+              </Button>
+            </div>
+          </GlassCard>
+        ))}
+      </div>
+    </div>
+  );
+}
