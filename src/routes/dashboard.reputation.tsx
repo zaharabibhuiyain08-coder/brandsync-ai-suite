@@ -1,13 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, Sparkles, Send, X } from "lucide-react";
+import { AlertTriangle, Sparkles, Send, X, Flame, Reply, ShieldAlert, Ticket, Bell, CheckCircle2, Filter, Megaphone, Zap, MessageCircle, ArrowRight } from "lucide-react";
 import { PageHeader, GlassCard, StatCard, Pill } from "@/components/app/ui";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 import { sentimentBreakdown, mentions } from "@/lib/mock";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/dashboard/reputation")({
   component: Reputation,
